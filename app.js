@@ -36,6 +36,17 @@ app.post('/students', (req, res) => {
       });
 });
 
+app.get('/students/:id', (req, res)=>{
+  const id = parseInt(req.params.id)
+  db.getDbStudents()
+  .then(students =>{
+    const student= students.find(s=>s.id === id)
+    if(!student) res.status(404).send("no student found");
+    else res.send(student)
+  })
+
+})
+
 
 const port = 3000;
 

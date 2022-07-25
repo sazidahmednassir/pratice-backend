@@ -1,9 +1,13 @@
 const express = require('express');
+const student = require('./routers/studentRouter')
 
 const app = express();
-const db = require('./db')
+
 
 app.use(express.json());
+
+app.use('/students', student)
+
 
 app.get('/', (req, res) => {
   res.send('Hello World');
@@ -15,69 +19,6 @@ app.get('/student', (req, res) => {
   res.send(JSON.stringify(['SAZID', 'FARIA']));
 });
 
-const students= (req, res) => {
-  db.getDbStudents()
-  .then(students=>{
-    res.send(students);
-  })
- 
-}
-
-const createStudent= (req, res) => {
-  const student = req.body;
-  db.getDbStudents()
-      .then(students => {
-          students.push(student);
-          db.insertDbStudent(students)
-              .then(student => {
-                  res.send(student);
-              });
-      });
-}
-
-const getOneStudent =  (req, res)=>{
-  const id = parseInt(req.params.id)
-  db.getDbStudents()
-  .then(students =>{
-    const student= students.find(s=>s.id === id)
-    if(!student) res.status(404).send("no student found");
-    else res.send(student)
-  })
-
-}
-
-const updatestudent = (req, res) => {
-  const id = parseInt(req.params.id);
-  const updatedData = req.body;
-  db.getDbStudents()
-      .then(students => {
-          const student = students.find(s => s.id === id);
-          if (!student) res.status(404).send("No student found with this id!");
-          else {
-              const i = students.findIndex(s => s.id === id);
-              students[i] = updatedData;
-              db.insertDbStudent(students)
-                  .then(msg => res.send(updatedData));
-          }
-      });
-}
-
-const deleteStudent= (req, res) => {
-  const id = parseInt(req.params.id)
-  db.getDbStudents()
-  .then(students =>{
-    const student= students.find(s=>s.id === id)
-    if(!student) res.status(404).send("no student found");
-    const updatedstudents= students.filter(s=> s.id !== id)
-    db.insertDbStudent(updatedstudents)
-    .then(msg=>res.send(student))
-  })
- 
-}
-
-app.route('/students').get(students).post(createStudent);
-
-app.route('/students/:id').get(getOneStudent).put(updatestudent).delete(deleteStudent);
 
 
 const port = 3000;

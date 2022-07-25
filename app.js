@@ -75,17 +75,11 @@ const deleteStudent= (req, res) => {
  
 }
 
-app.get('/students', students);
+app.route('/students').get(students).post(createStudent);
+
+app.route('/students/:id').get(getOneStudent).put(updatestudent).delete(deleteStudent);
 
 
-app.post('/students', createStudent);
-
-app.get('/students/:id', getOneStudent)
-
-app.put('/students/:id', updatestudent);
-
-
-app.delete('/students/:id', deleteStudent)
 const port = 3000;
 
 app.listen(port, () => {

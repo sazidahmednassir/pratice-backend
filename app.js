@@ -1,5 +1,6 @@
 const express = require('express');
 const student = require('./routers/studentRouter')
+const morgan= require('morgan')
 
 const app = express();
 
@@ -7,6 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extend:true}))
 app.use(express.static('public'))
+app.use(morgan('dev'))
 
 app.use((req,res, next)=>{
   console.log('hello i am middleware')

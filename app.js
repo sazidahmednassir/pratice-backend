@@ -5,6 +5,13 @@ const app = express();
 
 
 app.use(express.json());
+app.use(express.urlencoded({extend:true}))
+app.use(express.static('public'))
+
+app.use((req,res, next)=>{
+  console.log('hello i am middleware')
+ next()
+})
 
 app.use('/students', student)
 

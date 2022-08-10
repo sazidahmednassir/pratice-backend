@@ -1,12 +1,19 @@
 const express = require('express');
 const student = require('./routers/studentRouter')
 const morgan= require('morgan')
-
+const mongoose= require('mongoose');
 const app = express();
+
+mongoose.connect('mongodb://localhost:27017/my-student-2', {
+  useNewUrlParser: true
+ 
+})
+.then(()=>console.log('connected on database'))
+.catch(err=>console.error(`Mongodb connection fail ${err}` ))
 
 
 app.use(express.json());
-app.use(express.urlencoded({extend:true}))
+
 app.use(express.static('public'))
 app.use(morgan('dev'))
 
